@@ -1,8 +1,14 @@
 @import "tailwindcss";
+/* app/globals.css - ajoute ces styles */
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+    --primary: #f97316;
+  --primary-dark: #ea580c;
+  --secondary: #f59e0b;
+  --dark: #1f2937;
+  --light: #f9fafb;
 }
 
 @theme inline {
@@ -22,5 +28,48 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, Inter,sans-serif;
+}
+
+
+
+
+/* Animation pour les cartes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

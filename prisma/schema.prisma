@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}//generer ainsi
+
+datasource db {
+  provider = "postgresql"
+}//generer ainsi 
+
+// prisma/schema.prisma
+
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  orders    Order[]  // La relation côté User
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  products  Product[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Int
+  imageUrl    String?
+  isAvailable Boolean  @default(true)
+  categoryId  String
+  // NOUVEAUX CHAMPS :
+  isNew       Boolean  @default(false) // Si true -> Ruban NEW
+  category    Category @relation(fields: [categoryId], references: [id])
+  orders      OrderProduct[]
+}
+
+model Order {
+  id              String         @id @default(cuid())
+  totalAmount     Int
+  status          OrderStatus    @default(PENDING)
+  customerPhone   String         // Pour WhatsApp
+  deliveryAddress String?
+  createdAt       DateTime       @default(now())
+  
+  // LA CORRECTION EST ICI :
+  userId          String?        // Optionnel pour les "Guests" (hybride !)
+  user            User?          @relation(fields: [userId], references: [id])
+  
+  products        OrderProduct[]
+}
+
+model OrderProduct {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+}
+
+model SpecialPlate {
+  id         String @id @default(cuid())
+  day        String 
+  dishName   String
+  priceSmall Int    @default(1000)
+  priceLarge Int    @default(1500)
+}
