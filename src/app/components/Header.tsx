@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,9 +47,12 @@ export default function Header() {
               <Link href="/profile" className="text-sm font-semibold bg-gray-100 px-4 py-2 rounded-full hover:bg-gray-200 transition">
                 Mes Commandes
               </Link>
-              <form action="/api/auth/signout" method="post" className="inline">
-                <button type="submit" className="text-sm font-semibold text-red-500 border border-red-300 px-4 py-2 rounded-full hover:bg-red-50">Déconnexion</button>
-              </form>
+              <button 
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="text-sm font-semibold text-red-500 border border-red-300 px-4 py-2 rounded-full hover:bg-red-50"
+              >
+                Déconnexion
+              </button>
             </>
           ) : (
             <Link href="/login" className="text-sm font-bold text-orange-600 border border-orange-600 px-4 py-2 rounded-full hover:bg-orange-50 transition">
@@ -96,14 +99,15 @@ export default function Header() {
                   >
                     Mes Commandes
                   </Link>
-                  <form action="/api/auth/signout" method="post">
-                    <button
-                      type="submit"
-                      className="w-full text-left py-2 px-3 rounded-lg text-red-500 hover:bg-red-50 transition"
-                    >
-                      Déconnexion
-                    </button>
-                  </form>
+                  <button
+                    onClick={() => {
+                      signOut({ callbackUrl: '/' });
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left py-2 px-3 rounded-lg text-red-500 hover:bg-red-50 transition"
+                  >
+                    Déconnexion
+                  </button>
                 </>
               ) : (
                 <Link

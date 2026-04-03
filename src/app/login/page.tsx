@@ -5,6 +5,7 @@ import { authenticate } from "@/app/actions/login"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
   const [error, setError] = useState("")
@@ -13,12 +14,28 @@ export default function LoginPage() {
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
-    const res = await authenticate(formData)
-    if (res?.error) {
-      setError(res.error)
+    setError("")
+
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        setError("Identifiants invalides.")
+      } else {
+        router.push("/")
+        router.refresh() // Force refresh to update session in Header
+      }
+    } catch (error) {
+      setError("Une erreur est survenue.")
+    } finally {
       setIsLoading(false)
-    } else {
-      router.push("/profile")
     }
   }
 
