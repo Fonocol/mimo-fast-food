@@ -8,7 +8,7 @@ export async function GET() {
       include: { category: true }
     })
     return NextResponse.json(products)
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Erreur lors de la récupération" }, { status: 500 })
   }
 }

@@ -27,7 +27,7 @@ export default function Footer() {
 
           {/* Horaires */}
           <div>
-            <h4 className="font-bold text-gray-900 mb-4">Horaires d'ouverture</h4>
+            <h4 className="font-bold text-gray-900 mb-4">Horaires d&apos;ouverture</h4>
             <ul className="text-gray-500 text-sm space-y-2">
               <li className="flex justify-between"><span>Lun - Sam</span> <span>08h - 22h</span></li>
               <li className="flex justify-between text-orange-600 font-medium"><span>Dimanche</span> <span>08h - 22h</span></li>

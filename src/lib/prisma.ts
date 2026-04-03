@@ -8,10 +8,12 @@ const connectionString = `${process.env.DATABASE_URL}`
 
 // 2. On configure le pool de connexions
 const pool = new Pool({ connectionString })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const adapter = new PrismaPg(pool as any)
 
 // 3. Fonction qui crée l'instance Prisma avec l'adapter
 const prismaClientSingleton = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return new PrismaClient({ adapter: adapter as any })
 }
 

@@ -23,7 +23,7 @@ export async function registerUser(formData: FormData) {
       }
     })
     return { success: "Compte créé ! Connectez-vous." }
-  } catch (e) {
+  } catch {
     return { error: "Cet email est déjà utilisé." }
   }
 }

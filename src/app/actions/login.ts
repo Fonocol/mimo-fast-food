@@ -6,7 +6,8 @@ import { AuthError } from "next-auth"
 
 export async function authenticate(formData: FormData) {
   try {
-    await signIn("credentials", Object.fromEntries(formData))
+    await signIn("credentials", { ...Object.fromEntries(formData), redirect: false })
+    return { success: true }
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -16,6 +17,6 @@ export async function authenticate(formData: FormData) {
           return { error: "Une erreur est survenue." }
       }
     }
-    throw error // Important pour la redirection de NextAuth
+    throw error
   }
 }

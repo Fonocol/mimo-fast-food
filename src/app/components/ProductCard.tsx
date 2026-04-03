@@ -1,10 +1,29 @@
 // src/components/ProductCard.tsx
-export default function ProductCard({ product }: { product: any }) {
-    console.log(product)
+"use client"
+
+import { useState } from "react"
+import { ProductDetailModal } from "./ProductDetailModal"
+
+type ProductType = {
+  id: string
+  name: string
+  price: number
+  description?: string | null
+  imageUrl?: string | null
+  isAvailable: boolean
+  isNew: boolean
+}
+
+export default function ProductCard({ product }: { product: ProductType }) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
-    <div className="relative group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col p-3">
-      
-      {/* 1. RUBAN "NEW" (Visuel uniquement) */}
+    <>
+      <div className="relative group bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full hover:border-orange-300">
+        
+        {/* RUBAN NEW */}
+
+        {/* 1. RUBAN "NEW" (Visuel uniquement) */}
       {product.isNew && (
         <div className="absolute top-0 left-0 z-10">
           <div className="bg-red-500 text-white text-[10px] font-black px-8 py-1.5 -rotate-45 -translate-x-8 translate-y-3 shadow-md uppercase tracking-tighter">
@@ -13,51 +32,59 @@ export default function ProductCard({ product }: { product: any }) {
         </div>
       )}
 
-      {/* 2. ZONE IMAGE + TAMPON "SOLD OUT" */}
-      <div className={`relative h-48 w-full rounded-2xl flex items-center justify-center p-4 transition-all duration-300 ${!product.isAvailable ? 'bg-gray-50' : 'bg-orange-50/50'}`}>
-        <img 
-          src={product.imageUrl || "/burger-placeholder.png"} 
-          alt={product.name} 
-          className={`object-contain h-full w-full transition-all duration-500 ${!product.isAvailable ? 'grayscale opacity-50 blur-[1px]' : 'group-hover:scale-110'}`} 
-        />
-        
-        {/* TAMPON SOLD OUT (Visuel uniquement) */}
-        {!product.isAvailable && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="border-4 border-red-600 text-red-600 font-black px-5 py-2 rounded-xl uppercase rotate-12 bg-white/90 scale-125 shadow-2xl">
-              Sold Out
+        {/* IMAGE SECTION */}
+        <div className={`relative h-56 w-full flex items-center justify-center p-4 transition-all duration-300 ${!product.isAvailable ? 'bg-gray-100' : 'bg-gradient-to-br from-orange-50 to-orange-100/50'}`}>
+          <img 
+            src={product.imageUrl || "/burger-placeholder.png"} 
+            alt={product.name} 
+            className={`object-contain h-full w-full transition-transform duration-500 ${!product.isAvailable ? 'grayscale opacity-40' : 'group-hover:scale-105'}`} 
+          />
+          
+          {!product.isAvailable && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="border-4 border-red-500 text-red-500 font-black px-4 py-2 rounded-lg bg-white/95 scale-110 shadow-xl">
+                SOLD OUT
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* CONTENT */}
+        <div className="p-4 flex flex-col flex-grow">
+          <h3 className="font-bold text-base text-gray-800 capitalize line-clamp-2">{product.name.toLowerCase()}</h3>
+          
+          <p className="mt-2 text-lg font-black text-orange-600">
+            {product.price} <span className="text-xs text-gray-500">FCFA</span>
+          </p>
+          
+          <p className="mt-2 text-gray-400 text-xs line-clamp-2 flex-grow">
+            {product.description || "Qualité Mimo Fast Food"}
+          </p>
+        </div>
+
+        {/* ACTIONS */}
+        <div className="p-4 pt-0 space-y-2">
+          {product.isAvailable && (
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-lg font-bold shadow-md transition-all active:scale-95 text-sm"
+            >
+              Voir plus et commander
+            </button>
+          )}
+          {!product.isAvailable && (
+            <div className="w-full bg-gray-100 text-gray-400 py-2.5 rounded-lg text-center font-semibold text-sm">
+              Indisponible
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* 3. CONTENU (Texte) */}
-      <div className="p-4 flex flex-col flex-grow text-center">
-        <h3 className="font-bold text-lg text-gray-800 mb-1 capitalize line-clamp-1">{product.name.toLowerCase()}</h3>
-        
-        {/* Prix toujours visible */}
-        <p className="mt-1 text-xl font-black text-orange-600">{product.price} <small className="text-[10px]">FCFA</small></p>
-        
-        <p className="mt-3 text-gray-400 text-xs line-clamp-2">
-          {product.description || "Recette authentique Mimo Fast Food, préparée avec des produits frais."}
-        </p>
-      </div>
-
-      {/* 4. ZONE ACTION (Hybride) */}
-      <div className="p-3 pt-0 mt-auto">
-        {!product.isAvailable ? (
-          // Bouton désactivé pour SOLD OUT
-          <div className="w-full bg-gray-100 text-gray-400 py-3 rounded-xl font-bold text-center text-sm border border-gray-100 cursor-not-allowed">
-            Indisponible
-          </div>
-        ) : (
-          // Bouton d'action pour les produits disponibles
-          <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-orange-100 hover:shadow-orange-200 active:scale-95 transition-all flex items-center justify-center gap-2">
-            Ajouter au panier 
-            <span className="text-xs">🛒</span>
-          </button>
-        )}
-      </div>
-    </div>
+      <ProductDetailModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        product={product}
+      />
+    </>
   )
 }

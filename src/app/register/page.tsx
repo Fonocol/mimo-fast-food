@@ -16,17 +16,36 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <form action={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
-        <h1 className="text-2xl font-bold mb-6 text-orange-600">Créer un compte Mimo</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 p-4">
+      <form action={handleSubmit} className="w-full max-w-md bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-orange-100">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl sm:text-3xl font-black text-orange-600 mb-2">MIMO</h1>
+          <p className="text-sm sm:text-base text-gray-600">Creer un compte</p>
+        </div>
         
-        <input name="name" type="text" placeholder="Nom complet" className="w-full p-3 border rounded-lg mb-4" />
-        <input name="email" type="email" placeholder="Email" className="w-full p-3 border rounded-lg mb-4" required />
-        <input name="password" type="password" placeholder="Mot de passe" className="w-full p-3 border rounded-lg mb-6" required />
+        {error && (
+          <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm border border-red-200 font-semibold">
+            {error}
+          </div>
+        )}
         
-        <button type="submit" className="w-full bg-orange-500 text-white p-3 rounded-lg font-bold hover:bg-orange-600">
-          S'inscrire
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Nom complet</label>
+            <input name="name" type="text" placeholder="Votre nom" className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm" />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+            <input name="email" type="email" placeholder="votre@email.com" className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm" required />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Mot de passe</label>
+            <input name="password" type="password" placeholder="••••••••" className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm" required />
+          </div>
+        </div>
+        
+        <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-bold transition-all active:scale-95 shadow-lg mt-6 text-sm sm:text-base">
+          S&apos;inscrire
         </button>
       </form>
     </div>

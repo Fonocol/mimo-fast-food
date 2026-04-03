@@ -82,8 +82,9 @@ model OrderProduct {
 
 model SpecialPlate {
   id         String @id @default(cuid())
-  day        String 
+  day        String @unique
   dishName   String
+  imageUrl   String?
   priceSmall Int    @default(1000)
   priceLarge Int    @default(1500)
 }
